@@ -1,0 +1,28 @@
+*{
+/*    outline: 1px solid red;*/
+}
+body{
+    font-size : 16px;
+}
+nav{
+    position: fixed;
+    left:0px;
+    top:0px;
+}
+nav .brand-logo{
+    font-size: 170%;
+    font-weight: 400;
+    letter-spacing: 1px;
+    padding-left:20px;
+}
+.container{
+    height:100vh; 
+    display: flex;
+    align-items: center;
+}
+.sub-panel{
+    height: 400px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
