@@ -10,7 +10,7 @@ $response = "";
 
 // Fetch data in json form
 $cardDetails = json_decode($_GET['cardDetails'], true);
-print_r($cardDetails);
+//print_r($cardDetails);
 
 
 // fetch data from server cardNumber
@@ -18,7 +18,6 @@ $query = "SELECT * FROM `emd`.`carddetails` WHERE cardNumber='".$cardDetails['ca
 $result = mysqli_query($link, $query);
 if(mysqli_num_rows($result) != 0){
     while($row = mysqli_fetch_array($result)){
-        print_r( $row);
         if ($row['expiry']==$cardDetails['expiry'] && $row['cvv']==$cardDetails['cvv'])
             $response = "success";
         else 
@@ -32,5 +31,5 @@ if ($response == "success"){
     mysqli_query($link,$query);
 }
 
-echo $response
+echo $response;
 ?>

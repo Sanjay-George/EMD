@@ -105,7 +105,7 @@ $(document).ready(function(){
         })
         .done(function(response){
             console.log(response);
-            if(response == 'success'){
+            if(response.replace(/\s/g,'') === "success"){
 //                 window.location.href="paymentSuccess.php";
                 alert('success');
             }
