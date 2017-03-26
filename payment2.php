@@ -3,14 +3,21 @@
 session_start();
 require('config.php');
 
-//if(array_key_exists("purchase",$_GET)){
-//    print_r($_GET);
-//}
-//
-////$json = json_encode($array); // php to json
-//
-//$array2 = json_decode('[{"name":"med1","qty":"2"},{"name":"med2","qty":"2"}]', true); // json to php array
-//print_r($array2);
+$orderId = $_SESSION['orderId'];
+// fetch from orders table
+//echo $orderId;
+
+$query = "SELECT totalAmount FROM `orders` WHERE order_id=".$orderId." LIMIT 1";
+$result = mysqli_query($link, $query);
+$response = array(); 
+if (mysqli_num_rows($result) != 0) 
+{ 
+	while($row = mysqli_fetch_array($result)){
+        array_push($response, $row);
+//        print_r($row);
+    }
+}
+print_r($response);
 
 ?>
 
@@ -42,26 +49,26 @@ require('config.php');
                     <form>
                         <div class="col m12 input-field">
                             <label>Full Name</label>
-                            <input type="text" name="name" placeholder="Enter full name">
+                            <input type="text" name="name" placeholder="John Smith" autocomplete="name" required>
                         </div>
                         <div class="col m12 input-field">
                             <label>Email</label>
-                            <input type="email" name="email" placeholder="Enter email">
+                            <input type="email" name="email" placeholder="name@example.com" autocomplete="email" required>
                         </div>
                         <div class="col m12 input-field">
                             <label>Address</label>
-                            <input type="text" name="address" placeholder="Enter address">
+                            <input type="text" name="address" placeholder="H-23, Blue River apt., Surat, Gujarat, India" required>
                         </div>
                         <div class="col m6 input-field">
                             <label>Pincode</label>
-                            <input type="number" name="pincode" placeholder="Enter Pincode">
+                            <input type="number" name="pincode" placeholder="132456" required>
                         </div>
                         <div class="col m6 input-field">
                             <label>Contact Number</label>
-                            <input type="number" name="ctNumber" placeholder="Enter Contact Number">
+                            <input type="number" name="ctNumber" placeholder="9999999999" autocomplete="mobile" required>
                         </div>
                         <div class="col m12 center" style="padding-top:20px; padding-bottom:30px;">
-                            <button name="pay-online" class='waves-effect waves-light btn light-blue darken-1'><i class='material-icons'>credit_card</i><span>Pay using card</span></button>
+                            <button name="submit" class='waves-effect waves-light btn light-blue darken-1'><i class='material-icons'>credit_card</i><span>Pay using card</span></button>
                         </div>
                     </form>
                 </div>
@@ -79,31 +86,42 @@ require('config.php');
 <script>
 $(document).ready(function(){
     
-  
+    // FETCH ORDER AMOUNT AS JSON
+    var orderTotal = <?php echo json_encode($response); ?>;
+    console.log(orderTotal);
+    // display
+    $('.s-card-header span').text(orderTotal[0].totalAmount);
     
-    
-//    // send data from javascript to php
-//    function callPHP(params) {
-//        var httpc = new XMLHttpRequest(); // simplified for clarity
-//        var url = "get_data.php";
-//        httpc.open("POST", url, true); // sending as POST
-//
-//        httpc.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-//        httpc.setRequestHeader("Content-Length", params.length); // POST request MUST have a Content-Length header (as per HTTP/1.1)
-//
-//        httpc.onreadystatechange = function() { //Call a function when the state changes.
-//        if(httpc.readyState == 4 && httpc.status == 200) { // complete and no errors
-//            alert(httpc.responseText); // some processing here, or whatever you want to do with the response
-//            }
-//        }
-//        httpc.send(params);
-//    }
-//    
+    // SUBMIT BUTTON CLICK
+    $('button[name="submit"]').click(function(e){
+        e.preventDefault();
+        var deliveryDetails = setData();
+        $.ajax({
+            url : "setDeliveryDetails.php",
+            method : "GET",
+            data : {deliveryDetails : JSON.stringify(deliveryDetails)}
+        })
+        .done(function(response){
+            console.log(response);
+            window.location.href="payment3.php";
+        })
+    });
+
     
     // initialize components
     $('select').material_select();
  
 });
+    
+var setData = function(){
+    var deliveryDetailsObj = {};
+    deliveryDetailsObj.name = $('input[name="name"]').val();
+    deliveryDetailsObj.email = $('input[name="email"]').val();
+    deliveryDetailsObj.address = $('input[name="address"]').val();
+    deliveryDetailsObj.pincode = $('input[name="pincode"]').val();
+    deliveryDetailsObj.ctNumber = $('input[name="ctNumber"]').val();
+    return deliveryDetailsObj;
+}
 
 </script>
 </body>

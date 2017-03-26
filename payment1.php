@@ -102,7 +102,7 @@ $(document).ready(function(){
     $target = $('#order-details').find('.last');
     // DISPLAY DATA
     for (var i=0; i < medicineObject.length; i++){
-        $target.before("<div class='col m12 details-row'><div class='col m4'>"+medicineObject[i][0]+"</div><div class='col m3'>"+medicineObject[i][2]+"</div><div class='col m2'><input type='number'></div><div class='col m3'>"+2*medicineObject[i][2]+"</div></div>");
+        $target.before("<div class='col m12 details-row'><div class='col m4'>"+medicineObject[i][0]+"</div><div class='col m3'>"+medicineObject[i][2]+"</div><div class='col m2'><input type='number'></div><div class='col m3'>"+1*medicineObject[i][2]+"</div></div>");
     }
     $('input[type="number"]').val(1);
     
@@ -116,15 +116,17 @@ $(document).ready(function(){
     // SUBMIT BUTTON CLICK
     $('button[name="submit"]').click(function(e){
         e.preventDefault();
-        setData();
-//        $.ajax({
-//            url : "setOrderDetails.php",
-//            method : "GET",
-//            data : {}
-//        })
-//        .done(function(response){
-//            console.log(response);
-//        })
+        var orderDetails = setData();
+        total = findTotal();
+        $.ajax({
+            url : "setOrderDetails.php",
+            method : "GET",
+            data : {orderId : Math.floor(Math.random()*90000000)+10000000, totalAmount:total, orderDetails : JSON.stringify(orderDetails)}
+        })
+        .done(function(response){
+            console.log(response);
+            window.location.href="payment2.php";
+        })
     });
     
 
@@ -133,6 +135,17 @@ $(document).ready(function(){
     $('select').material_select();
  
 });
+    
+    
+// UPDATE INDIVIDUAL TOTAL
+$('#order-details').on("change", "input", function(){
+//    console.log("changed");  
+    var price = $(this).parent('div').siblings('div:nth-child(2)').html(); 
+    $(this).parent('div').siblings('div:nth-child(4)').html($(this).val()*price); 
+    var total = findTotal();
+    $('.total-amt').html(total);
+});  
+    
     
 // CREATE ORDERDETAILS ARRAY FOR SENDING
 var setData = function(){
@@ -144,12 +157,11 @@ var setData = function(){
         orderDetailsObject.medicine = $(this).children('div:nth-child(1)').html();
         orderDetailsObject.qty = $(this).children('div:nth-child(3)').children('input').val();
         orderDetailsObject.total = $(this).children('div:nth-child(4)').html();
-        orderDetails[index] = orderDetailsObject;
-     
+        orderDetails.push( JSON.parse(JSON.stringify(orderDetailsObject)));
     });
     
-    console.log(orderDetails);  
-//    return orderDetails;
+//    console.log(orderDetails);  
+    return orderDetails;
 }
     
     

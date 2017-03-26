@@ -3,15 +3,21 @@
 session_start();
 require('config.php');
 
-//if(array_key_exists("purchase",$_GET)){
-//    print_r($_GET);
-//}
-//
-////$json = json_encode($array); // php to json
-//
-//$array2 = json_decode('[{"name":"med1","qty":"2"},{"name":"med2","qty":"2"}]', true); // json to php array
-//print_r($array2);
+$orderId = $_SESSION['orderId'];
+// fetch from orders table
+//echo $orderId;
 
+$query = "SELECT totalAmount FROM `orders` WHERE order_id=".$orderId." LIMIT 1";
+$result = mysqli_query($link, $query);
+$response = array(); 
+if (mysqli_num_rows($result) != 0) 
+{ 
+	while($row = mysqli_fetch_array($result)){
+        array_push($response, $row);
+//        print_r($row);
+    }
+}
+//print_r($response);
 ?>
 
 
@@ -43,27 +49,27 @@ require('config.php');
                     <form method="post">
                         <div class="col m9 input-field" style="padding-right:2px">
                             <label>Card Number</label>
-                            <input type="number" name="card-number" placeholder="Enter Card Number" oninput="checkCardType()">
+                            <input type="number" name="card-number" placeholder="Enter Card Number" oninput="checkCardType()" autocomplete="cc-number">
                         </div>
                         <div id="card-icon" class="col m1">
                             <img class='responsive-img' src="">&nbsp;
                         </div>
                         <div class="col m2 input-field">
                             <label>CVV</label>
-                            <input type="number" name="cvv" placeholder="cvv">
+                            <input type="number" name="cvv" placeholder="cvv" autocomplete="cc-csc">
                         </div>
                         <div class="col m12 input-field">
                             <label>Expiry date</label>
-                            <input type="date" class="datepicker" name="expiry" placeholder="Select Expiry Date">
+                            <input type="date" class="datepicker" name="expiry" placeholder="Select Expiry Date" autocomplete="cc-exp">
                         </div>
                         <div class="col m12 input-field">
                             <label>Card Holder's Name</label>
-                            <input type="text" name="holder-name" placeholder="Enter Card Holder's Name">
+                            <input type="text" name="holder-name" placeholder="Enter Card Holder's Name" autocomplete="cc-name">
                         </div>
                         
                         
                         <div class="col m12 center" style="padding-top:20px; padding-bottom:30px;">
-                            <button name="pay-online" class='waves-effect waves-light btn light-blue darken-1'><i class='material-icons'>credit_card</i><span>Pay ₹500.0 </span></button>
+                            <button name="submit" class='waves-effect waves-light btn light-blue darken-1'><i class='material-icons'>credit_card</i><span>Pay ₹500.0 </span></button>
                         </div>
                     </form>
                 </div>
@@ -81,31 +87,41 @@ require('config.php');
 <script>
 $(document).ready(function(){
     
-    
-  
-    
-    
-//    // send data from javascript to php
-//    function callPHP(params) {
-//        var httpc = new XMLHttpRequest(); // simplified for clarity
-//        var url = "get_data.php";
-//        httpc.open("POST", url, true); // sending as POST
-//
-//        httpc.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-//        httpc.setRequestHeader("Content-Length", params.length); // POST request MUST have a Content-Length header (as per HTTP/1.1)
-//
-//        httpc.onreadystatechange = function() { //Call a function when the state changes.
-//        if(httpc.readyState == 4 && httpc.status == 200) { // complete and no errors
-//            alert(httpc.responseText); // some processing here, or whatever you want to do with the response
-//            }
-//        }
-//        httpc.send(params);
-//    }
-//    
+     // FETCH ORDER AMOUNT AS JSON
+    var orderTotal = <?php echo json_encode($response); ?>;
+    console.log(orderTotal);
+    // display
+    $('.s-card-header span').text(orderTotal[0].totalAmount);
+
+    // SUBMIT BUTTON CLICK
+    $('button[name="submit"]').click(function(e){
+        e.preventDefault();
+        var cardDetails = setData();
+//        console.log(cardDetails);
+        $.ajax({
+            url : "checkCardDetails.php",
+            method : "GET",
+            data : {cardDetails : JSON.stringify(cardDetails)}
+        })
+        .done(function(response){
+            console.log(response);
+            if(response == 'success'){
+//                 window.location.href="paymentSuccess.php";
+                alert('success');
+            }
+            else{
+                alert('card not found');
+            }
+//               
+        });
+    });
+
+
     
     // initialize components
     $('select').material_select();
     $('.datepicker').pickadate({
+        format: 'yyyy-mm-dd',
         selectMonths: true, // Creates a dropdown to control month
         selectYears: 30, // Creates a dropdown of 15 years to control year
         min : true,
@@ -113,6 +129,15 @@ $(document).ready(function(){
       });
  
 });
+   
+var setData = function(){
+    var cardDetailsObj = {};
+    cardDetailsObj.cardNumber = $('input[name="card-number"]').val();
+    cardDetailsObj.expiry = $('input[name="expiry"]').val();
+    cardDetailsObj.cvv = $('input[name="cvv"]').val();
+    cardDetailsObj.cardHolderName = $('input[name="holder-name"]').val();
+    return cardDetailsObj;
+}    
     
     
 // mastercard or visa
