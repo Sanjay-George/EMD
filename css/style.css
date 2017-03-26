@@ -20,9 +20,46 @@ nav .brand-logo{
     display: flex;
     align-items: center;
 }
+.container .row{
+    width:100%;
+    margin:0px;
+}
 .sub-panel{
     height: 400px;
     display: flex;
     align-items: center;
     justify-content: center;
 }
+button .material-icons{
+    font-size : 120%;
+    margin-right:10px;
+}
+button span{
+    position: relative;
+    top: -4px;
+}
+
+/*-----------------------------------------------*/
+/*------------PAYMENT SECTION -------------------*/
+/*-----------------------------------------------*/
+.s-card-header{
+    font-size : 160%;
+    font-weight:300;
+    background-color : #039be5  ;
+    color : #fff;
+    padding-top:10px !important;
+    padding-bottom:10px !important;
+}
+.s-card-content{
+    padding-top : 30px !important;
+}
+#card-icon{
+    height:100%;
+    padding:0px;
+}
+#card-icon img{
+    width:40px;
+    padding-top:20px;
+}
+
+/*----------END OF PAYMENT SECTION----------------*/
