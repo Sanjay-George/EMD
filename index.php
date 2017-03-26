@@ -3,14 +3,25 @@
 session_start();
 require('config.php');
 
-if(array_key_exists("purchase",$_GET)){
-    print_r($_GET);
+// FETCH LIST OF MEDICINES 
+$query = "SELECT DISTINCT m_medicine FROM `emd`.`medicine` ORDER BY m_medicine";
+$result = mysqli_query($link, $query);
+$medicines = array();
+if (mysqli_num_rows($result) != 0) 
+{ 
+	while($row = mysqli_fetch_array($result)){
+        array_push($medicines, $row['m_medicine']);
+    }
 }
+//print_r($medicines);
+//echo json_encode($medicines);
+
+
 
 //$json = json_encode($array); // php to json
 
-$array2 = json_decode('[{"name":"med1","qty":"2"},{"name":"med2","qty":"2"}]', true); // json to php array
-print_r($array2);
+//$array2 = json_decode('[{"name":"med1","qty":"2"},{"name":"med2","qty":"2"}]', true); // json to php array
+//print_r($array2);
 
 ?>
 
@@ -72,12 +83,11 @@ print_r($array2);
                         <form id="purchase" class='col m12'>
                             <div class='col m12 input-field'>
                                 <select name='medicines' multiple>
-                                    <option value="" disabled selected>Choose your poison</option>
+                                    <option value="" disabled selected>Select Medicines</option>
+<!--
                                     <option value="paracetamol">Paracetamol</option>
-                                    <option value="augmentin">Augmentin</option>
-                                    <option value="sleep">Sleep</option>
-                                    <option value="music">Music</option>
-                                    <option value="something else">Something else</option>
+-->
+                                   
                                 </select>
                                 <label>Medicine</label>
                             </div>
@@ -101,34 +111,35 @@ print_r($array2);
 <script src="js/jquery-3.2.0.js"></script>
 <script src="materialize/js/materialize.js"></script>
 <script>
+    
+
+    
 $(document).ready(function(){
+    // FETCH MEDICINE DATA AND DISPLAY
+    var medicinesArray = <?php echo json_encode($medicines);?>;
+    for (var i=3; i<medicinesArray.length; i++){
+        $("select[name='medicines']").append("<option value='"+medicinesArray[i]+"'>"+medicinesArray[i]+"</option>");
+    }
     
-    
+    // PURCHASE BUTTON CLICK
     $('button[name="purchase"]').click(function(e){
         e.preventDefault();
-        console.log($('#purchase').find('select').val());
-//        var medObject = $('#purchase').find('select').val()
-//        callPHP(medObject);
+        var medObject = JSON.stringify($('#purchase').find('select').val());
+        console.log(medObject);
+        
+        $.ajax({
+            url : "selectMedicines.php",
+            method : "GET",
+            data : {medObject:medObject},
+        })
+        .done(function(response){
+            console.log(response);
+            // redirect to next page
+            window.location.href="payment1.php";
+        });
     })
     
     
-//    // send data from javascript to php
-//    function callPHP(params) {
-//        var httpc = new XMLHttpRequest(); // simplified for clarity
-//        var url = "get_data.php";
-//        httpc.open("POST", url, true); // sending as POST
-//
-//        httpc.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-//        httpc.setRequestHeader("Content-Length", params.length); // POST request MUST have a Content-Length header (as per HTTP/1.1)
-//
-//        httpc.onreadystatechange = function() { //Call a function when the state changes.
-//        if(httpc.readyState == 4 && httpc.status == 200) { // complete and no errors
-//            alert(httpc.responseText); // some processing here, or whatever you want to do with the response
-//            }
-//        }
-//        httpc.send(params);
-//    }
-//    
     
     // initialize components
     $('select').material_select();

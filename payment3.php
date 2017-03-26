@@ -22,6 +22,7 @@ require('config.php');
     <title>EMD - Search your way to death </title>
     <link href="http://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <link rel="stylesheet" href="materialize/css/materialize.css">
+    <link rel="stylesheet" href="css/datePickerColor.css">
     <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
@@ -39,25 +40,25 @@ require('config.php');
                     <div class='col m3'>₹ <span>500.0</span></div>
                 </div> 
                 <div class='col m12 s-card-content'>
-                    <form>
+                    <form method="post">
                         <div class="col m9 input-field" style="padding-right:2px">
                             <label>Card Number</label>
-                            <input type="text" name="name" placeholder="Enter Card Number">
+                            <input type="number" name="card-number" placeholder="Enter Card Number" oninput="checkCardType()">
                         </div>
                         <div id="card-icon" class="col m1">
-                            <img class='responsive-img' src="images/visa.png">&nbsp;
+                            <img class='responsive-img' src="">&nbsp;
                         </div>
                         <div class="col m2 input-field">
                             <label>CVV</label>
-                            <input type="number" name="pincode" placeholder="cvv">
+                            <input type="number" name="cvv" placeholder="cvv">
                         </div>
                         <div class="col m12 input-field">
                             <label>Expiry date</label>
-                            <input type="date" class="datepicker" name="expiry" placeholder="Expiry Date">
+                            <input type="date" class="datepicker" name="expiry" placeholder="Select Expiry Date">
                         </div>
                         <div class="col m12 input-field">
                             <label>Card Holder's Name</label>
-                            <input type="text" name="address" placeholder="Enter Card Holder's Name">
+                            <input type="text" name="holder-name" placeholder="Enter Card Holder's Name">
                         </div>
                         
                         
@@ -79,6 +80,7 @@ require('config.php');
 <script src="materialize/js/materialize.js"></script>
 <script>
 $(document).ready(function(){
+    
     
   
     
@@ -111,6 +113,25 @@ $(document).ready(function(){
       });
  
 });
+    
+    
+// mastercard or visa
+var checkCardType = function(){
+    var cardNumber = $('input[name="card-number"]').val();
+    if(cardNumber.length == 1){
+        if(cardNumber == 5){
+            $('#card-icon').find('img').prop("src", "images/mastercard.png");
+        }
+        else if(cardNumber == 4){
+            $('#card-icon').find('img').prop("src", "images/visa.png");
+        }
+    }
+    else if(cardNumber.length == 0){
+        $('#card-icon').find('img').prop("src", "");
+    }
+    
+};
+
 
 </script>
 </body>

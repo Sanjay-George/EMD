@@ -61,7 +61,7 @@ require('config.php');
                             <input type="number" name="ctNumber" placeholder="Enter Contact Number">
                         </div>
                         <div class="col m12 center" style="padding-top:20px; padding-bottom:30px;">
-                            <button name="pay-online" class='waves-effect waves-light btn light-blue darken-1'><i class='material-icons'>credit_card</i><span>card payment</span></button>
+                            <button name="pay-online" class='waves-effect waves-light btn light-blue darken-1'><i class='material-icons'>credit_card</i><span>Pay using card</span></button>
                         </div>
                     </form>
                 </div>
