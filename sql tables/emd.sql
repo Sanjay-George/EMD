@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 4.2.7.1
+-- version 4.5.1
 -- http://www.phpmyadmin.net
 --
 -- Host: 127.0.0.1
--- Generation Time: Mar 26, 2017 at 07:09 AM
--- Server version: 5.6.20
--- PHP Version: 5.5.15
+-- Generation Time: May 09, 2017 at 04:10 AM
+-- Server version: 10.1.19-MariaDB
+-- PHP Version: 5.6.28
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET time_zone = "+00:00";
@@ -14,11 +14,35 @@ SET time_zone = "+00:00";
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
 /*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
-/*!40101 SET NAMES utf8 */;
+/*!40101 SET NAMES utf8mb4 */;
 
 --
--- Database: `med`
+-- Database: `emd`
 --
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `carddetails`
+--
+
+CREATE TABLE `carddetails` (
+  `id` int(11) NOT NULL,
+  `cardNumber` text NOT NULL,
+  `expiry` date NOT NULL,
+  `cardHolder` text NOT NULL,
+  `cvv` text NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `carddetails`
+--
+
+INSERT INTO `carddetails` (`id`, `cardNumber`, `expiry`, `cardHolder`, `cvv`) VALUES
+(2, '1234567812345678', '2018-01-01', 'Sanjay George', '552'),
+(3, '1234567887654321', '2017-05-30', 'John Smith', '102'),
+(4, '456789123456', '2017-06-01', 'Some Guy', '007'),
+(5, '546789123456', '2017-06-01', 'Hans Zimmer', '007');
 
 -- --------------------------------------------------------
 
@@ -26,7 +50,7 @@ SET time_zone = "+00:00";
 -- Table structure for table `diseases`
 --
 
-CREATE TABLE IF NOT EXISTS `diseases` (
+CREATE TABLE `diseases` (
   `d_id` int(11) NOT NULL,
   `d_bodypart` varchar(25) NOT NULL,
   `d_symptoms` text NOT NULL,
@@ -175,7 +199,7 @@ INSERT INTO `diseases` (`d_id`, `d_bodypart`, `d_symptoms`, `d_disease`) VALUES
 -- Table structure for table `medicine`
 --
 
-CREATE TABLE IF NOT EXISTS `medicine` (
+CREATE TABLE `medicine` (
   `m_id` int(11) NOT NULL,
   `m_disease` varchar(255) NOT NULL,
   `m_agegroup` varchar(255) NOT NULL,
@@ -238,6 +262,162 @@ INSERT INTO `medicine` (`m_id`, `m_disease`, `m_agegroup`, `m_medicine`, `m_dosa
 (18, 'Asthma', '15-60', 'fluticasone', '250mg', 300, 30),
 (18, 'Asthma', '18-60', 'Terbutaline', '100mL', 40, 25);
 
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `orderdetails`
+--
+
+CREATE TABLE `orderdetails` (
+  `id` int(11) NOT NULL,
+  `order_id` int(11) NOT NULL,
+  `u_id` int(11) NOT NULL,
+  `medicine` text NOT NULL,
+  `quantity` int(11) NOT NULL,
+  `total` decimal(10,2) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `orderdetails`
+--
+
+INSERT INTO `orderdetails` (`id`, `order_id`, `u_id`, `medicine`, `quantity`, `total`) VALUES
+(1, 23767223, 1, 'Acetaminophen', 1, '350.00'),
+(2, 23767223, 1, ' amoxicillin', 1, '200.00'),
+(3, 44054295, 1, 'Acetaminophen', 2, '700.00'),
+(4, 44054295, 1, ' amoxicillin', 2, '400.00'),
+(5, 53338190, 1, 'Acetaminophen', 2, '700.00'),
+(6, 53338190, 1, ' amoxicillin', 1, '200.00'),
+(107, 33484294, 1, 'Acetaminophen', 1, '350.00'),
+(108, 33484294, 1, 'Adfovir', 1, '150.00'),
+(109, 33484294, 1, ' amoxicillin', 1, '200.00'),
+(110, 52287286, 1, 'Acetaminophen', 3, '1050.00'),
+(111, 52287286, 1, 'Adfovir', 3, '450.00'),
+(112, 52287286, 1, ' amoxicillin', 1, '200.00'),
+(113, 99445091, 1, 'Chlorpropamide', 1, '5.00'),
+(114, 99445091, 1, 'peramivir', 3, '750.00'),
+(115, 99445091, 1, 'NSAIDs', 1, '200.00'),
+(116, 99445091, 1, 'Acetaminophen', 3, '1050.00'),
+(117, 99445091, 1, 'aspirin', 1, '20.00'),
+(118, 99445091, 1, 'Motrin', 1, '70.00'),
+(119, 99445091, 1, 'lansoprazole', 3, '120.00'),
+(120, 99445091, 1, 'Aspirin', 1, '50.00'),
+(121, 99445091, 1, 'Levodopa', 1, '30.00'),
+(122, 12684769, 1, 'Chlorpropamide', 1, '5.00'),
+(123, 12684769, 1, 'zanamivir', 1, '100.00'),
+(124, 12684769, 1, 'Motrin', 1, '70.00'),
+(125, 12684769, 1, 'cyclophosphamide', 3, '180.00'),
+(126, 12684769, 1, 'clarithromycin', 1, '110.00'),
+(127, 12684769, 1, 'Mefloquine', 5, '1500.00'),
+(128, 12684769, 1, 'Sinemet', 1, '780.00'),
+(129, 12684769, 1, 'Terbutaline', 1, '40.00'),
+(130, 47776736, 1, 'Rifampin', 4, '220.20'),
+(131, 47776736, 1, 'Streptomycin', 1, '10.00'),
+(132, 78482913, 1, 'Isoniazid', 2, '51.00');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `orders`
+--
+
+CREATE TABLE `orders` (
+  `name` text NOT NULL,
+  `email` text NOT NULL,
+  `contact` text NOT NULL,
+  `address` text NOT NULL,
+  `pincode` text NOT NULL,
+  `totalAmount` decimal(10,2) NOT NULL,
+  `payStatus` int(11) NOT NULL DEFAULT '0',
+  `order_id` int(11) NOT NULL,
+  `u_id` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `orders`
+--
+
+INSERT INTO `orders` (`name`, `email`, `contact`, `address`, `pincode`, `totalAmount`, `payStatus`, `order_id`, `u_id`) VALUES
+('Sanjay George', 'sanjaygeorge16@gmail.com', '778897789', 'blue hill, 123 road, California', '998856', '2785.00', 1, 12684769, 1),
+('Sanjay George', 'sanjaygeorge16@gmail.com', '9558661237', 'Svnit, Surat', '395007', '2663.50', 1, 20995957, 0),
+('divy shit', 'divya@lazy.com', '9788225522', 'bb ds adf daf dasf', '123456', '2490.00', 1, 31462892, 0),
+('Will Smith', 'willy@wonka.com', '9238827700', 'address, road, street, world, universe', '500050', '525.00', 1, 32489193, 0),
+('Some Random Patel', 'patel@gmail.com', '7550014239', 'Surat, Gujarat, India', '385662', '160.00', 1, 47465949, 0),
+('', '', '', '', '', '230.20', 0, 47776736, 1),
+('John Doe', 'john@gmail.com', '9586778823', 'Bhutan', '778988', '280.00', 1, 48352623, 0),
+('sanjay george', 'sanjaygeorge16@gmail.com', '123456789', 'some address , svnit, surat', '395001', '1700.00', 1, 52287286, 1),
+('Bradley ', 'bradley@cooper.com', '9999999999999999', 'machan house, kakkanad, kerala', '395007', '150.00', 0, 75576333, 0),
+('john smith', 'sanjaygeorge16@gmail.com', '9898989898', 'hdf dfaf ad fad f adf', '395007', '51.00', 1, 78482913, 1),
+('Sanjay George', 'sanjaygeorge16@gmail.com', '993729012', 'Building, street, city', '123456', '2295.00', 1, 99445091, 1);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `user`
+--
+
+CREATE TABLE `user` (
+  `u_id` int(11) NOT NULL,
+  `u_name` text NOT NULL,
+  `u_email` text NOT NULL,
+  `u_pass` text NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `user`
+--
+
+INSERT INTO `user` (`u_id`, `u_name`, `u_email`, `u_pass`) VALUES
+(1, 'SANJAY', 'sanjaygeorge16@gmail.com', '766c32f42272064af1740dd974e3e47e'),
+(2, 'New person', 'sadf@dasf.com', '823647ffddff7c7ab1dd1a1230f59c47');
+
+--
+-- Indexes for dumped tables
+--
+
+--
+-- Indexes for table `carddetails`
+--
+ALTER TABLE `carddetails`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `orderdetails`
+--
+ALTER TABLE `orderdetails`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `orders`
+--
+ALTER TABLE `orders`
+  ADD PRIMARY KEY (`order_id`);
+
+--
+-- Indexes for table `user`
+--
+ALTER TABLE `user`
+  ADD PRIMARY KEY (`u_id`);
+
+--
+-- AUTO_INCREMENT for dumped tables
+--
+
+--
+-- AUTO_INCREMENT for table `carddetails`
+--
+ALTER TABLE `carddetails`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+--
+-- AUTO_INCREMENT for table `orderdetails`
+--
+ALTER TABLE `orderdetails`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=133;
+--
+-- AUTO_INCREMENT for table `user`
+--
+ALTER TABLE `user`
+  MODIFY `u_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;

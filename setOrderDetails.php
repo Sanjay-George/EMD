@@ -14,15 +14,15 @@ $orderDetails = json_decode($_GET['orderDetails'], true);
 //print_r($orderDetails);
 
 // insert into orders table
-$query1 = "INSERT INTO `orders`(order_id,totalAmount) VALUES (".$orderId.",".$totalAmount.")";
+$query1 = "INSERT INTO `orders`(order_id,totalAmount,u_id) VALUES (".$orderId.",".$totalAmount.",".$_COOKIE['id'].")";
 mysqli_query($link, $query1);
-//echo $query."\n";
+echo $query1."\n";
 //echo "ok";
 
 
 // insert into orderDetails
 for ($i=0; $i<sizeof($orderDetails);$i++){
-    $query2 = "INSERT INTO `emd`.`orderdetails`(order_id,medicine,quantity,total) VALUES(".$orderId.",'".$orderDetails[$i]['medicine']."',".$orderDetails[$i]['qty'].",".$orderDetails[$i]['total'].")";
+    $query2 = "INSERT INTO `orderdetails`(order_id,u_id,medicine,quantity,total) VALUES(".$orderId.",".$_COOKIE['id'].",'".$orderDetails[$i]['medicine']."',".$orderDetails[$i]['qty'].",".$orderDetails[$i]['total'].")";
 //    echo $query."\n";
     mysqli_query($link, $query2);
 }

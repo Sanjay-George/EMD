@@ -38,6 +38,11 @@ button span{
     position: relative;
     top: -4px;
 }
+.warning {
+    font-size : 80%;
+    letter-spacing: 1px;
+    color : #3c3c3c;
+}
 
 /*-----------------------------------------------*/
 /*------------PAYMENT SECTION -------------------*/

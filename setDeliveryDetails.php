@@ -10,7 +10,7 @@ $orderId = $_SESSION['orderId'];
 $deliveryDetails = json_decode($_GET['deliveryDetails'], true);
 print_r($deliveryDetails);
 
-$query = "UPDATE `emd`.`orders` SET name='".$deliveryDetails['name']."',email='".$deliveryDetails['email']."',contact='".$deliveryDetails['ctNumber']."',address='".$deliveryDetails['address']."',pincode='".$deliveryDetails['pincode']."' WHERE order_id=".$orderId;
+$query = "UPDATE `orders` SET name='".$deliveryDetails['name']."',email='".$deliveryDetails['email']."',contact='".$deliveryDetails['ctNumber']."',address='".$deliveryDetails['address']."',pincode='".$deliveryDetails['pincode']."' WHERE order_id=".$orderId;
 
 mysqli_query($link, $query);
 

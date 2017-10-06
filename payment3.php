@@ -69,7 +69,7 @@ if (mysqli_num_rows($result) != 0)
                         
                         
                         <div class="col m12 center" style="padding-top:20px; padding-bottom:30px;">
-                            <button name="submit" class='waves-effect waves-light btn light-blue darken-1'><i class='material-icons'>credit_card</i><span>Pay ₹500.0 </span></button>
+                            <button name="submit" class='waves-effect waves-light btn light-blue darken-1'><i class='material-icons'>credit_card</i><span>Confrim Payment</span></button>
                         </div>
                     </form>
                 </div>
@@ -106,8 +106,9 @@ $(document).ready(function(){
         .done(function(response){
             console.log(response);
             if(response.replace(/\s/g,'') === "success"){
-//                 window.location.href="paymentSuccess.php";
                 alert('success');
+                window.location.href="index.php";
+
             }
             else{
                 alert('card not found');
